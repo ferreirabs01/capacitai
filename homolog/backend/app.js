@@ -8,6 +8,8 @@ const tipoEntidadeRoutes = require('./routes/tipo_entidade');
 const loginRoutes = require('./routes/login');
 const perfilRoutes = require('./routes/perfil');
 const vagasRoutes = require('./routes/vagas');
+const cursosRoutes = require('./routes/cursos');
+
 
 
 
@@ -27,6 +29,7 @@ app.use('/api/tipos', tipoEntidadeRoutes);
 app.use('/api/login', loginRoutes);
 app.use('/api/perfil', perfilRoutes);
 app.use('/api/vagas', vagasRoutes);
+app.use('/api/cursos', cursosRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

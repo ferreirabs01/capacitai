@@ -19,6 +19,21 @@
     </div>
   </div>
 
+  <!-- Modal -->
+  <div class="modal fade" id="modalCursos" tabindex="-1" aria-labelledby="modalCursosLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalCursosLabel">Cursos para competência</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body" id="conteudoCursos">
+          <!-- Conteúdo carregado via JavaScript -->
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
     const idEntidade = localStorage.getItem('id_entidade');
     let chavesPerfil = [];
@@ -36,6 +51,17 @@
       }
     }
 
+    async function buscarCursosPara(c) {
+      try {
+        const resposta = await fetch(`/api/cursos/por-competencia?c=${encodeURIComponent(c)}`);
+        const cursos = await resposta.json();
+        return cursos;
+      } catch (e) {
+        console.warn('Erro ao buscar cursos:', e);
+        return [];
+      }
+    }
+
     async function carregarVagas() {
       try {
         const resposta = await fetch('/api/vagas');
@@ -44,15 +70,27 @@
         const container = document.getElementById('listaVagas');
         container.innerHTML = '';
 
-        vagas.forEach(vaga => {
+        for (const vaga of vagas) {
           const competencias = JSON.parse(vaga.competencias);
           const competenciasLower = competencias.map(c => c.toLowerCase());
 
           const match = competenciasLower.filter(c => chavesPerfil.includes(c));
           const faltam = competenciasLower.filter(c => !chavesPerfil.includes(c));
 
-          const lista = [...match.map(c => `<span class='badge bg-success me-1'>${c}</span>`),
-                         ...faltam.map(c => `<span class='badge bg-danger me-1'>${c}</span>`)].join(' ');
+          const listaMatch = match.map(c => `<span class='badge bg-success me-1'>${c}</span>`);
+
+          const listaFaltam = await Promise.all(
+            faltam.map(async c => {
+              const cursos = await buscarCursosPara(c);
+              if (cursos.length >= 0) {
+                return `<span class='badge bg-danger me-1 badge-curso' data-competencia="${c}">${c}</span>`;
+              } else {
+                return `<span class='badge bg-danger me-1'>${c}</span>`;
+              }
+            })
+          );
+
+          const lista = [...listaMatch, ...listaFaltam].join(' ');
 
           const card = document.createElement('div');
           card.className = 'col-md-6 col-lg-4';
@@ -63,22 +101,47 @@
                 <h5 class="card-title">${vaga.descricao}</h5>
                 <p class="card-text text-muted">Competências exigidas:</p>
                 <div class="mb-3">${lista}</div>
-                <button class="btn btn-outline-primary mt-auto" onclick="analisarCompatibilidade(${vaga.id_vaga})">Analisar Compatibilidade</button>
               </div>
             </div>
           `;
 
           container.appendChild(card);
-        });
+
+          // Adiciona evento aos badges com cursos
+          setTimeout(() => {
+            card.querySelectorAll('.badge-curso').forEach(el => {
+              el.addEventListener('click', async function () {
+                const competencia = this.dataset.competencia;
+                const cursos = await buscarCursosPara(competencia);
+
+                let conteudoHTML = '';
+
+                if (cursos.length > 0) {
+                    const listaCursos = cursos.map(c => `
+                    <li><strong>${c.descricao}</strong><br>
+                    Prazo: ${c.prazo} dias<br>
+                    Valor: R$ ${c.valor}</li>
+                    `).join('');
+                    conteudoHTML = `<ul>${listaCursos}</ul>`;
+                } else {
+                    conteudoHTML = `<div class="alert alert-warning" role="alert">Não há entidades com esse curso.</div>`;
+                }
+
+                document.getElementById('modalCursosLabel').innerText = `Cursos para "${competencia}"`;
+                document.getElementById('conteudoCursos').innerHTML = conteudoHTML;
+
+                const modal = new bootstrap.Modal(document.getElementById('modalCursos'));
+                modal.show();
+                });
+
+            });
+          }, 0);
+        }
 
       } catch (err) {
         console.error('Erro ao carregar vagas:', err);
         alert('Erro ao carregar vagas.');
       }
-    }
-
-    function analisarCompatibilidade(idVaga) {
-      alert(`Análise feita para a vaga ${idVaga}. Veja os destaques.`);
     }
 
     carregarChavesPerfil().then(carregarVagas);
