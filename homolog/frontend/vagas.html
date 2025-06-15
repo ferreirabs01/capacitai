@@ -1,152 +1,166 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <title>Vagas Disponíveis</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <title>Vagas Disponíveis - CapacitAI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #ffffff;
+    }
+    .text-gradient {
+      background: linear-gradient(135deg, #38b6ff 0%, #0c4191 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .logo-ai { color: #6d2eb1; }
+    .navbar {
+      background: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .nav-link { color: #0c4191 !important; font-weight: 500; }
+    .nav-link:hover { color: #6d2eb1 !important; }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    .badge { font-size: 0.85rem; padding: 0.5em 0.75em; }
+  </style>
 </head>
-<body class="bg-light">
-  <div class="container py-5">
-    <h2 class="text-center mb-4">Vagas Disponíveis</h2>
+<body>
 
-    <div id="listaVagas" class="row g-4 justify-content-center">
-      <!-- Cards serão inseridos aqui via JavaScript -->
-    </div>
-
-    <div class="d-grid mt-5">
-      <a href="plataforma.html" class="btn btn-secondary">Voltar para a Plataforma</a>
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-light sticky-top">
+  <div class="container">
+    <span class="navbar-brand text-gradient">Capacit<span class="logo-ai">AI</span></span>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <i class="fas fa-bars text-primary"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item mx-2"><a class="nav-link" href="plataforma.html">Início</a></li>
+        <li class="nav-item mx-2"><a class="nav-link" href="#">Saiba Mais</a></li>
+        <li class="nav-item mx-2"><a class="nav-link" href="#">Contato</a></li>
+      </ul>
     </div>
   </div>
+</nav>
 
-  <!-- Modal -->
-  <div class="modal fade" id="modalCursos" tabindex="-1" aria-labelledby="modalCursosLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalCursosLabel">Cursos para competência</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-        </div>
-        <div class="modal-body" id="conteudoCursos">
-          <!-- Conteúdo carregado via JavaScript -->
-        </div>
+<main class="container py-5">
+  <h2 class="text-center mb-4">Vagas Disponíveis</h2>
+  <div id="listaVagas" class="row g-4 justify-content-center"></div>
+  <div class="text-center mt-5">
+    <a href="plataforma.html" class="btn btn-success px-4">Voltar para a Plataforma</a>
+  </div>
+</main>
+
+<!-- MODAL -->
+<div class="modal fade" id="modalCursos" tabindex="-1" aria-labelledby="modalCursosLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalCursosLabel">Cursos para competência</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
       </div>
+      <div class="modal-body" id="conteudoCursos"></div>
     </div>
   </div>
+</div>
 
-  <script>
-    const idEntidade = localStorage.getItem('id_entidade');
-    let chavesPerfil = [];
+<script>
+const idEntidade = localStorage.getItem('id_entidade');
+let chavesPerfil = [];
 
-    async function carregarChavesPerfil() {
-      if (!idEntidade) return;
-      try {
-        const res = await fetch(`/api/entidades/${idEntidade}`);
-        const data = await res.json();
-        if (data.chaves && Array.isArray(data.chaves)) {
-          chavesPerfil = data.chaves.map(c => c.toLowerCase());
-        }
-      } catch (err) {
-        console.error('Erro ao buscar perfil:', err);
-      }
+async function carregarChavesPerfil() {
+  if (!idEntidade) return;
+  try {
+    const res = await fetch(`/api/entidades/${idEntidade}`);
+    const data = await res.json();
+    if (data.chaves && Array.isArray(data.chaves)) {
+      chavesPerfil = data.chaves.map(c => c.toLowerCase());
     }
+  } catch (err) {
+    console.error('Erro ao buscar perfil:', err);
+  }
+}
 
-    async function buscarCursosPara(c) {
-      try {
-        const resposta = await fetch(`/api/cursos/por-competencia?c=${encodeURIComponent(c)}`);
-        const cursos = await resposta.json();
-        return cursos;
-      } catch (e) {
-        console.warn('Erro ao buscar cursos:', e);
-        return [];
-      }
+async function buscarCursosPara(c) {
+  try {
+    const resposta = await fetch(`/api/cursos/por-competencia?c=${encodeURIComponent(c)}`);
+    return await resposta.json();
+  } catch (e) {
+    console.warn('Erro ao buscar cursos:', e);
+    return [];
+  }
+}
+
+async function carregarVagas() {
+  try {
+    const resposta = await fetch('/api/vagas');
+    const vagas = await resposta.json();
+    const container = document.getElementById('listaVagas');
+    container.innerHTML = '';
+
+    for (const vaga of vagas) {
+      const competencias = JSON.parse(vaga.competencias);
+      const competenciasLower = competencias.map(c => c.toLowerCase());
+      const match = competenciasLower.filter(c => chavesPerfil.includes(c));
+      const faltam = competenciasLower.filter(c => !chavesPerfil.includes(c));
+
+      const listaMatch = match.map(c => `<span class='badge bg-success me-1'>${c}</span>`);
+      const listaFaltam = await Promise.all(faltam.map(async c => {
+        await buscarCursosPara(c); // só pra marcar todos como clicáveis
+        return `<span class='badge bg-danger me-1 badge-curso' data-competencia="${c}">${c}</span>`;
+      }));
+
+      const card = document.createElement('div');
+      card.className = 'col-md-6 col-lg-4';
+      card.innerHTML = `
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">${vaga.descricao}</h5>
+            <p class="card-text text-muted">Competências exigidas:</p>
+            <div class="mb-3">${[...listaMatch, ...listaFaltam].join(' ')}</div>
+          </div>
+        </div>`;
+      container.appendChild(card);
+
+      setTimeout(() => {
+        card.querySelectorAll('.badge-curso').forEach(el => {
+          el.addEventListener('click', async function () {
+            const competencia = this.dataset.competencia;
+            const cursos = await buscarCursosPara(competencia);
+            const conteudoHTML = cursos.length > 0 ?
+              `<ul>${cursos.map(c => `
+                <li class="mb-3">
+                  <strong>${c.descricao}</strong><br>
+                  Instituição: ${c.instituicao}<br>
+                  Telefone: ${c.telefone}<br>
+                  Prazo: ${c.prazo} dias<br>
+                  Valor: R$ ${c.valor}<br>
+                  <a href="${c.saiba_mais}" target="_blank">Acessar curso</a>
+                </li>`).join('')}</ul>`
+              : `<div class="alert alert-warning">Não há entidades com esse curso.</div>`;
+            document.getElementById('modalCursosLabel').innerText = `Cursos para "${competencia}"`;
+            document.getElementById('conteudoCursos').innerHTML = conteudoHTML;
+            new bootstrap.Modal(document.getElementById('modalCursos')).show();
+          });
+        });
+      }, 0);
     }
+  } catch (err) {
+    console.error('Erro ao carregar vagas:', err);
+    alert('Erro ao carregar vagas.');
+  }
+}
 
-    async function carregarVagas() {
-      try {
-        const resposta = await fetch('/api/vagas');
-        const vagas = await resposta.json();
-
-        const container = document.getElementById('listaVagas');
-        container.innerHTML = '';
-
-        for (const vaga of vagas) {
-          const competencias = JSON.parse(vaga.competencias);
-          const competenciasLower = competencias.map(c => c.toLowerCase());
-
-          const match = competenciasLower.filter(c => chavesPerfil.includes(c));
-          const faltam = competenciasLower.filter(c => !chavesPerfil.includes(c));
-
-          const listaMatch = match.map(c => `<span class='badge bg-success me-1'>${c}</span>`);
-
-          const listaFaltam = await Promise.all(
-            faltam.map(async c => {
-              const cursos = await buscarCursosPara(c);
-              if (cursos.length >= 0) {
-                return `<span class='badge bg-danger me-1 badge-curso' data-competencia="${c}">${c}</span>`;
-              } else {
-                return `<span class='badge bg-danger me-1'>${c}</span>`;
-              }
-            })
-          );
-
-          const lista = [...listaMatch, ...listaFaltam].join(' ');
-
-          const card = document.createElement('div');
-          card.className = 'col-md-6 col-lg-4';
-
-          card.innerHTML = `
-            <div class="card h-100 shadow-sm">
-              <div class="card-body d-flex flex-column">
-                <h5 class="card-title">${vaga.descricao}</h5>
-                <p class="card-text text-muted">Competências exigidas:</p>
-                <div class="mb-3">${lista}</div>
-              </div>
-            </div>
-          `;
-
-          container.appendChild(card);
-
-          // Adiciona evento aos badges com cursos
-          setTimeout(() => {
-            card.querySelectorAll('.badge-curso').forEach(el => {
-              el.addEventListener('click', async function () {
-                const competencia = this.dataset.competencia;
-                const cursos = await buscarCursosPara(competencia);
-
-                let conteudoHTML = '';
-
-                if (cursos.length > 0) {
-                    const listaCursos = cursos.map(c => `
-                    <li><strong>${c.descricao}</strong><br>
-                    Prazo: ${c.prazo} dias<br>
-                    Valor: R$ ${c.valor}</li>
-                    `).join('');
-                    conteudoHTML = `<ul>${listaCursos}</ul>`;
-                } else {
-                    conteudoHTML = `<div class="alert alert-warning" role="alert">Não há entidades com esse curso.</div>`;
-                }
-
-                document.getElementById('modalCursosLabel').innerText = `Cursos para "${competencia}"`;
-                document.getElementById('conteudoCursos').innerHTML = conteudoHTML;
-
-                const modal = new bootstrap.Modal(document.getElementById('modalCursos'));
-                modal.show();
-                });
-
-            });
-          }, 0);
-        }
-
-      } catch (err) {
-        console.error('Erro ao carregar vagas:', err);
-        alert('Erro ao carregar vagas.');
-      }
-    }
-
-    carregarChavesPerfil().then(carregarVagas);
-  </script>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+carregarChavesPerfil().then(carregarVagas);
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
 </body>
 </html>
