@@ -101,11 +101,11 @@
           </div>
           <div class="mb-3">
             <label for="login" class="form-label">Login</label>
-            <input type="text" class="form-control" id="login" required>
+            <input type="text" class="form-control" id="loginCadastro" required>
           </div>
           <div class="mb-3">
             <label for="senha" class="form-label">Senha</label>
-            <input type="password" class="form-control" id="senha" required>
+            <input type="password" class="form-control" id="senhaCadastro" required>
           </div>
           <div class="d-grid">
             <button type="submit" class="btn btn-success">Salvar Acesso</button>
@@ -118,109 +118,122 @@
 
 
 
-  <!-- JS de validação de login -->
-  <script>
 
 
-    //envio de dados do cadastro para o backend
+<script>
+  // Validação de login
+  document.getElementById('loginForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const usuario = document.getElementById('usuario').value.trim();
+    const senha = document.getElementById('senha').value.trim();
 
-  document.getElementById('formCadastro').addEventListener('submit', async function (e) {
-  e.preventDefault();
-
-  const data = {
-    nome: document.getElementById('nome').value.trim(),
-    tipo: document.getElementById('tipo').value,
-    razao_social: document.getElementById('razao_social').value.trim(),
-    nrCadastro: document.getElementById('nrCadastro').value.trim(),
-    email: document.getElementById('emailCadastro').value.trim(),
-    telefone: document.getElementById('telefone').value.trim()
-  };
-
-  try {
-    const response = await fetch('/api/entidades/cadastrar', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-    });
-
-    const result = await response.json();
-
-    if (response.ok) {
-      alert('Cadastro realizado com sucesso!');
-      const modal = bootstrap.Modal.getInstance(document.getElementById('modalCadastro'));
-      modal.hide();
-      document.getElementById('formCadastro').reset();
+    if (usuario === 'admin' && senha === 'admin@') {
+      window.location.href = 'plataforma.html';
     } else {
-      alert('Erro ao cadastrar: ' + result.message);
+      document.getElementById('erro').classList.remove('d-none');
     }
-  } catch (err) {
-    alert('Erro de conexão com o servidor.');
-  }
-
-  if (response.ok) {
-  const entidadeId = result.id;
-
-  // Armazena e abre o segundo modal
-  document.getElementById('id_entidade_cadastrada').value = entidadeId;
-
-  // Carrega tipos de entidade
-  const tipos = await fetch('/api/tipos');
-  const listaTipos = await tipos.json();
-
-  const select = document.getElementById('tipoUsuario');
-  select.innerHTML = '<option value="">Selecione</option>';
-  listaTipos.forEach(t => {
-    const opt = document.createElement('option');
-    opt.value = t.id_tipo;
-    opt.textContent = t.descricao;
-    select.appendChild(opt);
   });
 
-  const modalTipo = new bootstrap.Modal(document.getElementById('modalTipoUsuario'));
-  modalTipo.show();
+  // Cadastro de entidade
+  document.getElementById('formCadastro').addEventListener('submit', async function (e) {
+    e.preventDefault();
 
-  const modalCadastro = bootstrap.Modal.getInstance(document.getElementById('modalCadastro'));
-  modalCadastro.hide();
-  document.getElementById('formCadastro').reset();
-}
+    const data = {
+      nome: document.getElementById('nome').value.trim(),
+      tipo: document.getElementById('tipo').value,
+      razao_social: document.getElementById('razao_social').value.trim(),
+      nrCadastro: document.getElementById('nrCadastro').value.trim(),
+      email: document.getElementById('emailCadastro').value.trim(),
+      telefone: document.getElementById('telefone').value.trim()
+    };
 
-});
+    let response, result;
+    try {
+      response = await fetch('/api/entidades/cadastrar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
 
-document.getElementById('formTipoUsuario').addEventListener('submit', async function (e) {
-  e.preventDefault();
-
-  const data = {
-    id_entidade: document.getElementById('id_entidade_cadastrada').value,
-    id_tipo: document.getElementById('tipoUsuario').value,
-    login: document.getElementById('login').value.trim(),
-    senha: document.getElementById('senha').value.trim()
-  };
-
-  try {
-    const res = await fetch('/api/entidades/definir-tipo-e-usuario', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-    });
-
-    const result = await res.json();
-
-    if (res.ok) {
-      alert('Tipo de usuário e acesso definidos com sucesso!');
-      bootstrap.Modal.getInstance(document.getElementById('modalTipoUsuario')).hide();
-    } else {
-      alert('Erro ao salvar: ' + result.message);
+      result = await response.json();
+    } catch (err) {
+      alert('Erro de conexão com o servidor.');
+      return;
     }
-  } catch (err) {
-    alert('Erro ao conectar com o servidor.');
-  }
-});
 
+    if (!response.ok) {
+      alert('Erro ao cadastrar: ' + result.message);
+      return;
+    }
 
+    // Cadastro bem-sucedido
+    alert('Cadastro realizado com sucesso!');
+    const entidadeId = result.id;
+    document.getElementById('id_entidade_cadastrada').value = entidadeId;
 
+    // Carrega tipos
+    try {
+      const tipos = await fetch('/api/tipos');
+      const listaTipos = await tipos.json();
 
+      const select = document.getElementById('tipoUsuario');
+      select.innerHTML = '<option value="">Selecione</option>';
+      listaTipos.forEach(t => {
+        const opt = document.createElement('option');
+        opt.value = t.id_tipo;
+        opt.textContent = t.descricao;
+        select.appendChild(opt);
+      });
 
-  </script>
+      // Abrir modal 2 e fechar modal 1
+      const modalCadastro = bootstrap.Modal.getInstance(document.getElementById('modalCadastro'));
+      modalCadastro.hide();
+
+      const modalTipo = new bootstrap.Modal(document.getElementById('modalTipoUsuario'));
+      modalTipo.show();
+
+      document.getElementById('formCadastro').reset();
+    } catch (err) {
+      alert('Erro ao carregar tipos de entidade.');
+    }
+  });
+
+  // Cadastro de tipo + login
+  document.getElementById('formTipoUsuario').addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const data = {
+      id_entidade: document.getElementById('id_entidade_cadastrada').value,
+      id_tipo: document.getElementById('tipoUsuario').value,
+      login: document.getElementById('loginCadastro').value.trim(),
+      senha: document.getElementById('senhaCadastro').value.trim()
+    };
+
+    console.log("Dados enviados:", data);
+
+    try {
+      const res = await fetch('/api/entidades/definir-tipo-e-usuario', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      const result = await res.json();
+
+      if (res.ok) {
+        alert('Tipo de usuário e acesso definidos com sucesso!');
+        bootstrap.Modal.getInstance(document.getElementById('modalTipoUsuario')).hide();
+      } else {
+       alert('Erro ao salvar: ' + (result.message || 'Erro desconhecido') + '\n' + (result.detalhes || ''));
+      }
+    } catch (err) {
+      alert('Erro ao conectar com o servidor.');
+    }
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
