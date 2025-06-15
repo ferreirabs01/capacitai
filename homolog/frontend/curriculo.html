@@ -12,8 +12,7 @@
     <h2 class="text-center mb-4">Meu Currículo</h2>
 
     <form id="formCurriculo" enctype="multipart/form-data">
-      <input type="hidden" id="id_entidade" value="7"> <!-- Trocar para dinâmico futuramente -->
-
+      
       <div class="row">
         <div class="col-md-6 mb-3">
           <label for="nome" class="form-label">Nome</label>
@@ -40,36 +39,50 @@
       </div>
 
       <div class="d-grid">
-        <button type="submit" class="btn btn-success">Salvar/Atualizar Currículo</button>
+        <button type="submit" class="btn btn-success">Salvar/Atualizar Currículo</button>  
       </div>
+      <div class="d-grid mt-3">
+        <a href="plataforma.html" class="btn btn-secondary">Voltar para a Plataforma</a>
+        </div>
     </form>
   </div>
 
   <script>
     // Carregar dados da entidade e perfil
-    const id = document.getElementById('id_entidade').value;
+    const id = localStorage.getItem('id_entidade');
+
 
     async function carregarDados() {
-      try {
-        const res = await fetch(`/api/entidades/${id}`);
-        const data = await res.json();
+  if (!id) {
+    alert('Sessão expirada. Faça login novamente.');
+    window.location.href = 'login.html';
+    return;
+  }
 
-        document.getElementById('nome').value = data.nome;
-        document.getElementById('email').value = data.email;
+  try {
+    const res = await fetch(`/api/entidades/${id}`);
+    const data = await res.json();
 
-        if (data.foto) {
-          document.getElementById('previewFoto').src = data.foto;
-        }
+    document.getElementById('nome').value = data.nome || '';
+    document.getElementById('email').value = data.email || '';
 
-        if (data.curriculo) {
-          document.getElementById('curriculoLink').innerHTML =
-            `<a href="${data.curriculo}" target="_blank">Visualizar Currículo Atual</a>`;
-        }
-
-      } catch (err) {
-        alert('Erro ao carregar dados.');
-      }
+   if (data.foto) {
+    document.getElementById('previewFoto').src = data.foto;
+    } else {
+    document.getElementById('previewFoto').src = 'img/perfil.png';
     }
+
+
+    if (data.curriculo) {
+      document.getElementById('curriculoLink').innerHTML =
+        `<a href="${data.curriculo}" target="_blank">Visualizar Currículo Atual</a>`;
+    }
+
+  } catch (err) {
+    alert('Erro ao carregar dados.');
+  }
+}
+
 
     carregarDados();
 

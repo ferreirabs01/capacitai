@@ -81,5 +81,40 @@ router.post('/definir-tipo-e-usuario', (req, res) => {
 });
 
 
+// GET /api/entidades/:id → carrega dados para o currículo
+router.get('/:id', (req, res) => {
+  const id = req.params.id;
+
+  const sql = `
+    SELECT 
+      e.nome, e.email,
+      p.curriculo,
+      p.foto
+    FROM entidades e
+    LEFT JOIN perfil_candidato p ON p.id_entidade = e.id_entidade
+    WHERE e.id_entidade = ?
+  `;
+
+  conexao.query(sql, [id], (err, results) => {
+    if (err) {
+      console.error('Erro ao buscar dados do currículo:', err);
+      return res.status(500).json({ message: 'Erro interno ao carregar dados.' });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'Entidade não encontrada.' });
+    }
+
+    const row = results[0];
+    res.json({
+      nome: row.nome,
+      email: row.email,
+      foto: row.foto ? `/uploads/fotos/${row.foto}` : '',
+      curriculo: row.curriculo ? `/uploads/cv/${row.curriculo}` : ''
+    });
+  });
+});
+
+
 
 module.exports = router;

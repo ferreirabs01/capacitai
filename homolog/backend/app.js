@@ -13,6 +13,8 @@ const loginRoutes = require('./routes/login');
 dotenv.config();
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../frontend')));
+app.use('/img', express.static(path.join(__dirname, '../frontend/img')));
+
 
 
 app.use('/api/entidades', entidadeRoutes);
