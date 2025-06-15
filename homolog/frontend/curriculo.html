@@ -12,7 +12,6 @@
     <h2 class="text-center mb-4">Meu Currículo</h2>
 
     <form id="formCurriculo" enctype="multipart/form-data">
-      
       <div class="row">
         <div class="col-md-6 mb-3">
           <label for="nome" class="form-label">Nome</label>
@@ -28,7 +27,7 @@
         <label for="foto" class="form-label">Foto de Perfil</label>
         <input type="file" class="form-control" id="foto" accept="image/*">
         <div class="mt-2">
-          <img id="previewFoto" src="" alt="Foto atual" class="img-thumbnail" style="max-height: 150px;">
+          <img id="previewFoto" src="img/perfil.png" alt="Foto atual" class="img-thumbnail" style="max-height: 150px;">
         </div>
       </div>
 
@@ -38,57 +37,84 @@
         <div id="curriculoLink" class="mt-2"></div>
       </div>
 
+      <div id="chavesExtraidas" class="mt-2 text-muted small"></div>
+
+
       <div class="d-grid">
-        <button type="submit" class="btn btn-success">Salvar/Atualizar Currículo</button>  
+        <button type="submit" class="btn btn-success">Salvar/Atualizar Currículo</button>
       </div>
+
       <div class="d-grid mt-3">
         <a href="plataforma.html" class="btn btn-secondary">Voltar para a Plataforma</a>
-        </div>
+      </div>
     </form>
   </div>
 
   <script>
-    // Carregar dados da entidade e perfil
     const id = localStorage.getItem('id_entidade');
-
+    console.log('id_entidade:', id);
 
     async function carregarDados() {
-  if (!id) {
-    alert('Sessão expirada. Faça login novamente.');
-    window.location.href = 'login.html';
-    return;
-  }
+      if (!id) {
+        alert('Sessão expirada. Faça login novamente.');
+        window.location.href = 'login.html';
+        return;
+      }
 
-  try {
-    const res = await fetch(`/api/entidades/${id}`);
-    const data = await res.json();
+      try {
+        const res = await fetch(`/api/entidades/${id}`);
+        const data = await res.json();
 
-    document.getElementById('nome').value = data.nome || '';
-    document.getElementById('email').value = data.email || '';
+        document.getElementById('nome').value = data.nome || '';
+        document.getElementById('email').value = data.email || '';
 
-   if (data.foto) {
-    document.getElementById('previewFoto').src = data.foto;
-    } else {
-    document.getElementById('previewFoto').src = 'img/perfil.png';
+        const previewFoto = document.getElementById('previewFoto');
+        const caminhoFoto = `/img/entidade/fotos/${id}/foto.jpg`;
+
+        // Verifica se a imagem realmente existe
+        const testeImagem = new Image();
+        testeImagem.onload = () => {
+        previewFoto.src = caminhoFoto;
+        };
+        testeImagem.onerror = () => {
+        previewFoto.src = 'img/perfil.png';
+        };
+        testeImagem.src = caminhoFoto;
+
+        const curriculoLink = document.getElementById('curriculoLink');
+        const chavesDiv = document.getElementById('chavesExtraidas');
+
+        if (data.curriculo && data.curriculo !== '') {
+        curriculoLink.innerHTML =
+            `<a href="/img/entidade/curriculos/${id}/curriculo.pdf" target="_blank">Visualizar Currículo Atual</a>`;
+        
+        // Mostra as palavras-chave, se existirem
+        if (data.chaves && Array.isArray(data.chaves) && data.chaves.length > 0) {
+            chavesDiv.innerHTML = `<strong>Palavras-chave detectadas:</strong> ${data.chaves.join(', ')}`;
+        } else {
+            chavesDiv.innerHTML = `<strong>Palavras-chave detectadas:</strong> Nenhuma encontrada.`;
+        }
+
+        } else {
+        curriculoLink.innerHTML = '';
+        chavesDiv.innerHTML = '';
+        }
+
+      } catch (err) {
+        alert('Erro ao carregar dados.');
+        console.error(err);
+      }
     }
-
-
-    if (data.curriculo) {
-      document.getElementById('curriculoLink').innerHTML =
-        `<a href="${data.curriculo}" target="_blank">Visualizar Currículo Atual</a>`;
-    }
-
-  } catch (err) {
-    alert('Erro ao carregar dados.');
-  }
-}
-
 
     carregarDados();
 
-    // Envio de arquivos
     document.getElementById('formCurriculo').addEventListener('submit', async function (e) {
       e.preventDefault();
+
+      if (!id) {
+        alert('Sessão expirada.');
+        return;
+      }
 
       const formData = new FormData();
       formData.append('id_entidade', id);
@@ -115,6 +141,7 @@
         }
       } catch (err) {
         alert('Erro de conexão com o servidor.');
+        console.error(err);
       }
     });
   </script>

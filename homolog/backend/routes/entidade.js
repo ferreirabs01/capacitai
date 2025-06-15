@@ -89,7 +89,7 @@ router.get('/:id', (req, res) => {
     SELECT 
       e.nome, e.email,
       p.curriculo,
-      p.foto
+      p.foto, p.chaves
     FROM entidades e
     LEFT JOIN perfil_candidato p ON p.id_entidade = e.id_entidade
     WHERE e.id_entidade = ?
@@ -109,8 +109,13 @@ router.get('/:id', (req, res) => {
     res.json({
       nome: row.nome,
       email: row.email,
-      foto: row.foto ? `/uploads/fotos/${row.foto}` : '',
-      curriculo: row.curriculo ? `/uploads/cv/${row.curriculo}` : ''
+      foto: row.foto
+        ? `/img/entidade/fotos/${row.foto}`
+        : '/img/perfil.png',
+      curriculo: row.curriculo
+        ? `/img/entidade/curriculos/${row.id_entidade}/curriculo.pdf`
+        : '',
+      chaves: row.chaves ? JSON.parse(row.chaves) : []
     });
   });
 });
