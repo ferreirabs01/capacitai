@@ -122,17 +122,34 @@
 
 <script>
   // Validação de login
-  document.getElementById('loginForm').addEventListener('submit', function (e) {
-    e.preventDefault();
-    const usuario = document.getElementById('usuario').value.trim();
-    const senha = document.getElementById('senha').value.trim();
+ document.getElementById('loginForm').addEventListener('submit', async function (e) {
+  e.preventDefault();
+  const usuario = document.getElementById('usuario').value.trim();
+  const senha = document.getElementById('senha').value.trim();
 
-    if (usuario === 'admin' && senha === 'admin@') {
+  try {
+    const res = await fetch('/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ login: usuario, senha })
+    });
+
+    const result = await res.json();
+
+    if (res.ok) {
+      // Salvar id_entidade em localStorage para uso futuro
+      localStorage.setItem('id_entidade', result.id_entidade);
+      localStorage.setItem('nome', result.nome);
       window.location.href = 'plataforma.html';
     } else {
+      document.getElementById('erro').textContent = result.message;
       document.getElementById('erro').classList.remove('d-none');
     }
-  });
+  } catch (err) {
+    alert('Erro ao conectar com o servidor.');
+  }
+});
+
 
   // Cadastro de entidade
   document.getElementById('formCadastro').addEventListener('submit', async function (e) {
@@ -221,9 +238,9 @@
       const result = await res.json();
 
       if (res.ok) {
-        alert('Tipo de usuário e acesso definidos com sucesso!');
-        bootstrap.Modal.getInstance(document.getElementById('modalTipoUsuario')).hide();
-      } else {
+        alert('Cadastro completo! Redirecionando para a plataforma...');
+        window.location.href = 'plataforma.html';
+      }else {
        alert('Erro ao salvar: ' + (result.message || 'Erro desconhecido') + '\n' + (result.detalhes || ''));
       }
     } catch (err) {

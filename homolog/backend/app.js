@@ -5,6 +5,8 @@ const app = express();
 const dotenv = require('dotenv');
 const entidadeRoutes = require('./routes/entidade');
 const tipoEntidadeRoutes = require('./routes/tipo_entidade');
+const loginRoutes = require('./routes/login');
+
 
 
 
@@ -15,6 +17,7 @@ app.use(express.static(path.join(__dirname, '../frontend')));
 
 app.use('/api/entidades', entidadeRoutes);
 app.use('/api/tipos', tipoEntidadeRoutes);
+app.use('/api/login', loginRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
