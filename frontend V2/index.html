@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>CapacitAI - Educação Profissional com IA</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#0c4191',
+            secondary: '#6d2eb1',
+            accent: '#38b6ff',
+            success: '#7ed957',
+            warning: '#dc681d',
+            light: '#d9d9d9',
+            dark: '#000000',
+          },
+          fontFamily: {
+            sans: ['Poppins', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .text-gradient {
+        @apply bg-clip-text text-transparent bg-gradient-to-r from-accent to-primary;
+      }
+      .btn-gradient {
+        @apply bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary transition-all duration-500;
+      }
+      .card-hover {
+        @apply transition-all duration-300 hover:scale-105 hover:shadow-xl;
+      }
+    }
+  </style>
+</head>
+<body class="font-sans bg-white text-dark antialiased">
+  <!-- Navbar -->
+  <nav class="bg-white shadow-md sticky top-0 z-50">
+    <div class="container mx-auto px-6 py-3">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-2">
+          <i class="fas fa-brain text-3xl text-accent"></i>
+          <span class="text-2xl font-bold text-gradient">Capacit<span class="text-secondary">AI</span></span>
+        </div>
+        <div class="hidden md:flex items-center space-x-8">
+          <a href="#" class="text-primary font-medium hover:text-secondary">Início</a>
+          <a href="saibamais.html" class="text-gray-600 hover:text-primary">Saiba Mais</a>
+          <a href="#" class="text-gray-600 hover:text-primary">Contato</a>
+        </div>
+        <div class="flex items-center space-x-4">
+          <a href="login.html" class="px-4 py-2 rounded-md font-medium btn-gradient text-white shadow-md hover:shadow-lg">Login</a>
+          <button class="md:hidden focus:outline-none">
+            <i class="fas fa-bars text-2xl text-primary"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="relative bg-gradient-to-br from-primary to-secondary text-white overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80')] bg-cover bg-center"></div>
+    </div>
+    <div class="container mx-auto px-6 py-24 relative z-10">
+      <div class="flex flex-col md:flex-row items-center">
+        <div class="md:w-1/2 mb-12 md:mb-0">
+          <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+            Transforme seu futuro com <span class="text-gradient bg-white">educação profissional</span> e IA
+          </h1>
+          <p class="text-xl mb-8 text-light">
+            Cursos gratuitos e personalizados para pessoas de baixa renda. Nossa IA analisa seu currículo e recomenda o melhor caminho para sua carreira.
+          </p>
+          <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+            <a href="login.html" class="px-8 py-4 rounded-lg font-bold btn-gradient text-white text-center shadow-lg hover:shadow-xl transition-all">
+              Comece Agora <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+            <a href="saibamais.html" class="px-8 py-4 rounded-lg font-bold bg-white text-primary text-center shadow-md hover:shadow-lg transition-all">
+              Saiba Mais <i class="fas fa-info-circle ml-2"></i>
+            </a>
+          </div>
+        </div>
+        <div class="md:w-1/2 flex justify-center">
+          <div class="relative w-full max-w-md">
+            <div class="absolute -top-6 -left-6 w-32 h-32 bg-accent rounded-full opacity-20 animate-pulse"></div>
+            <div class="absolute -bottom-6 -right-6 w-32 h-32 bg-success rounded-full opacity-20 animate-pulse delay-300"></div>
+            <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80" 
+                 alt="Estudantes felizes" 
+                 class="relative z-10 rounded-xl shadow-2xl border-8 border-white transform rotate-2 hover:rotate-0 transition-transform duration-500">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="absolute bottom-0 left-0 right-0 h-16 bg-white/10 backdrop-blur-md"></div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="py-16 bg-light">
+    <div class="container mx-auto px-6">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
+        <div class="bg-white p-8 rounded-xl shadow-lg card-hover">
+          <div class="text-5xl font-bold text-primary mb-2">10K+</div>
+          <div class="text-gray-600">Alunos capacitados</div>
+          <div class="mt-4 text-accent">
+            <i class="fas fa-users text-3xl"></i>
+          </div>
+        </div>
+        <div class="bg-white p-8 rounded-xl shadow-lg card-hover">
+          <div class="text-5xl font-bold text-secondary mb-2">50+</div>
+          <div class="text-gray-600">Cursos disponíveis</div>
+          <div class="mt-4 text-warning">
+            <i class="fas fa-book-open text-3xl"></i>
+          </div>
+        </div>
+        <div class="bg-white p-8 rounded-xl shadow-lg card-hover">
+          <div class="text-5xl font-bold text-success mb-2">85%</div>
+          <div class="text-gray-600">Taxa de empregabilidade</div>
+          <div class="mt-4 text-success">
+            <i class="fas fa-briefcase text-3xl"></i>
+          </div>
+        </div>
+        <div class="bg-white p-8 rounded-xl shadow-lg card-hover">
+          <div class="text-5xl font-bold text-warning mb-2">100%</div>
+          <div class="text-gray-600">Gratuito para todos</div>
+          <div class="mt-4 text-secondary">
+            <i class="fas fa-heart text-3xl"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="py-20 bg-white">
+    <div class="container mx-auto px-6">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold text-primary mb-4">Como a <span class="text-gradient">CapacitAI</span> funciona?</h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">Nossa plataforma utiliza inteligência artificial para oferecer a melhor experiência de aprendizado personalizado.</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+        <!-- Step 1 -->
+        <div class="bg-white p-8 rounded-xl shadow-lg border-t-4 border-accent card-hover">
+          <div class="flex items-center justify-center w-16 h-16 bg-accent/10 rounded-full mb-6">
+            <span class="text-2xl font-bold text-accent">1</span>
+          </div>
+          <h3 class="text-xl font-bold text-primary mb-4">Análise de Currículo por IA</h3>
+          <p class="text-gray-600 mb-4">Envie seu currículo e nossa IA identifica suas habilidades, lacunas e oportunidades de melhoria.</p>
+          <div class="text-accent text-4xl">
+            <i class="fas fa-file-alt"></i>
+          </div>
+        </div>
+        
+        <!-- Step 2 -->
+        <div class="bg-white p-8 rounded-xl shadow-lg border-t-4 border-secondary card-hover">
+          <div class="flex items-center justify-center w-16 h-16 bg-secondary/10 rounded-full mb-6">
+            <span class="text-2xl font-bold text-secondary">2</span>
+          </div>
+          <h3 class="text-xl font-bold text-primary mb-4">Plano de Aprendizado Personalizado</h3>
+          <p class="text-gray-600 mb-4">Receba recomendações de cursos perfeitos para suas metas de carreira e nível de conhecimento.</p>
+          <div class="text-secondary text-4xl">
+            <i class="fas fa-route"></i>
+          </div>
+        </div>
+        
+        <!-- Step 3 -->
+        <div class="bg-white p-8 rounded-xl shadow-lg border-t-4 border-success card-hover">
+          <div class="flex items-center justify-center w-16 h-16 bg-success/10 rounded-full mb-6">
+            <span class="text-2xl font-bold text-success">3</span>
+          </div>
+          <h3 class="text-xl font-bold text-primary mb-4">Capacitação e Conquista</h3>
+          <p class="text-gray-600 mb-4">Complete os cursos, adquira certificados e esteja pronto para o mercado de trabalho!</p>
+          <div class="text-success text-4xl">
+            <i class="fas fa-graduation-cap"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Courses -->
+  <section class="py-20 bg-gradient-to-b from-light to-white">
+    <div class="container mx-auto px-6">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold text-primary mb-4">Nossos <span class="text-gradient">Cursos</span> em Destaque</h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">Cursos gratuitos de alta qualidade para impulsionar sua carreira.</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Course 1 -->
+        <div class="bg-white rounded-xl overflow-hidden shadow-lg card-hover">
+          <div class="relative">
+            <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1472&q=80" 
+                 alt="Desenvolvimento Web" 
+                 class="w-full h-48 object-cover">
+            <div class="absolute top-4 right-4 bg-accent text-white px-3 py-1 rounded-full text-sm font-bold">
+              Popular
+            </div>
+          </div>
+          <div class="p-6">
+            <div class="flex items-center mb-2">
+              <div class="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center mr-2">
+                <i class="fas fa-laptop-code text-primary"></i>
+              </div>
+              <span class="text-sm text-gray-600">Tecnologia</span>
+            </div>
+            <h3 class="text-xl font-bold text-primary mb-2">Desenvolvimento Web Full Stack</h3>
+            <p class="text-gray-600 mb-4">Aprenda HTML, CSS, JavaScript e frameworks modernos para se tornar um desenvolvedor completo.</p>
+            <div class="flex justify-between items-center">
+              <div class="flex items-center">
+                <i class="fas fa-star text-warning mr-1"></i>
+                <span class="font-medium">4.9</span>
+                <span class="text-gray-500 ml-1">(1.2k)</span>
+              </div>
+              <span class="text-success font-bold">GRATUITO</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Course 2 -->
+        <div class="bg-white rounded-xl overflow-hidden shadow-lg card-hover">
+          <div class="relative">
+            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+                 alt="Análise de Dados" 
+                 class="w-full h-48 object-cover">
+            <div class="absolute top-4 right-4 bg-success text-white px-3 py-1 rounded-full text-sm font-bold">
+              Novo
+            </div>
+          </div>
+          <div class="p-6">
+            <div class="flex items-center mb-2">
+              <div class="w-8 h-8 bg-secondary/10 rounded-full flex items-center justify-center mr-2">
+                <i class="fas fa-chart-line text-secondary"></i>
+              </div>
+              <span class="text-sm text-gray-600">Dados</span>
+            </div>
+            <h3 class="text-xl font-bold text-primary mb-2">Análise de Dados com Python</h3>
+            <p class="text-gray-600 mb-4">Domine Pandas, NumPy e visualização de dados para tomar decisões baseadas em dados.</p>
+            <div class="flex justify-between items-center">
+              <div class="flex items-center">
+                <i class="fas fa-star text-warning mr-1"></i>
+                <span class="font-medium">4.8</span>
+                <span class="text-gray-500 ml-1">(890)</span>
+              </div>
+              <span class="text-success font-bold">GRATUITO</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Course 3 -->
+        <div class="bg-white rounded-xl overflow-hidden shadow-lg card-hover">
+          <div class="relative">
+            <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1415&q=80" 
+                 alt="Marketing Digital" 
+                 class="w-full h-48 object-cover">
+          </div>
+          <div class="p-6">
+            <div class="flex items-center mb-2">
+              <div class="w-8 h-8 bg-warning/10 rounded-full flex items-center justify-center mr-2">
+                <i class="fas fa-bullhorn text-warning"></i>
+              </div>
+              <span class="text-sm text-gray-600">Marketing</span>
+            </div>
+            <h3 class="text-xl font-bold text-primary mb-2">Marketing Digital para Iniciantes</h3>
+            <p class="text-gray-600 mb-4">Aprenda SEO, mídias sociais e publicidade online para promover negócios digitalmente.</p>
+            <div class="flex justify-between items-center">
+              <div class="flex items-center">
+                <i class="fas fa-star text-warning mr-1"></i>
+                <span class="font-medium">4.7</span>
+                <span class="text-gray-500 ml-1">(1.5k)</span>
+              </div>
+              <span class="text-success font-bold">GRATUITO</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="text-center mt-12">
+        <a href="#" class="inline-block px-8 py-3 rounded-lg font-bold btn-gradient text-white shadow-md hover:shadow-lg transition-all">
+          Ver Todos os Cursos <i class="fas fa-arrow-right ml-2"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="py-20 bg-primary text-white">
+    <div class="container mx-auto px-6">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4">O que dizem nossos <span class="text-accent">alunos</span></h2>
+        <p class="text-xl text-light max-w-3xl mx-auto">Histórias reais de transformação através da educação profissional.</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Testimonial 1 -->
+        <div class="bg-white/10 p-8 rounded-xl backdrop-blur-sm card-hover">
+          <div class="flex items-center mb-4">
+            <img src="https://randomuser.me/api/portraits/women/32.jpg" 
+                 alt="Maria Silva" 
+                 class="w-12 h-12 rounded-full border-2 border-accent">
+            <div class="ml-4">
+              <h4 class="font-bold">Maria Silva</h4>
+              <p class="text-light text-sm">Assistente Administrativa</p>
+            </div>
+          </div>
+          <p class="mb-4">"Graças ao curso de Excel Avançado da CapacitAI, consegui uma promoção no trabalho e aumentei meu salário em 40%!"</p>
+          <div class="flex text-warning">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+          </div>
+        </div>
+        
+        <!-- Testimonial 2 -->
+        <div class="bg-white/10 p-8 rounded-xl backdrop-blur-sm card-hover">
+          <div class="flex items-center mb-4">
+            <img src="https://randomuser.me/api/portraits/men/45.jpg" 
+                 alt="João Santos" 
+                 class="w-12 h-12 rounded-full border-2 border-accent">
+            <div class="ml-4">
+              <h4 class="font-bold">João Santos</h4>
+              <p class="text-light text-sm">Desenvolvedor Júnior</p>
+            </div>
+          </div>
+          <p class="mb-4">"A análise de currículo da IA me mostrou exatamente quais habilidades eu precisava desenvolver. Em 6 meses consegui meu primeiro emprego em TI!"</p>
+          <div class="flex text-warning">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+          </div>
+        </div>
+        
+        <!-- Testimonial 3 -->
+        <div class="bg-white/10 p-8 rounded-xl backdrop-blur-sm card-hover">
+          <div class="flex items-center mb-4">
+            <img src="https://randomuser.me/api/portraits/women/68.jpg" 
+                 alt="Ana Oliveira" 
+                 class="w-12 h-12 rounded-full border-2 border-accent">
+            <div class="ml-4">
+              <h4 class="font-bold">Ana Oliveira</h4>
+              <p class="text-light text-sm">Analista de Marketing</p>
+            </div>
+          </div>
+          <p class="mb-4">"Nunca imaginei que poderia estudar marketing digital de graça e com qualidade tão alta. Hoje tenho meu próprio negócio online."</p>
+          <div class="flex text-warning">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star-half-alt"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-20 bg-gradient-to-r from-secondary to-primary">
+    <div class="container mx-auto px-6 text-center">
+      <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">Pronto para transformar sua carreira?</h2>
+      <p class="text-xl text-light mb-8 max-w-2xl mx-auto">Cadastre-se gratuitamente e descubra como a CapacitAI pode ajudar você a alcançar seus objetivos profissionais.</p>
+      <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+        <a href="login.html" class="px-8 py-4 rounded-lg font-bold bg-white text-primary text-center shadow-lg hover:shadow-xl transition-all">
+          Comece Agora <i class="fas fa-rocket ml-2"></i>
+        </a>
+        <a href="#" class="px-8 py-4 rounded-lg font-bold border-2 border-white text-white text-center hover:bg-white/10 transition-all">
+          Fale Conosco <i class="fas fa-comments ml-2"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white py-12">
+    <div class="container mx-auto px-6">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div>
+          <div class="flex items-center space-x-2 mb-4">
+            <i class="fas fa-brain text-3xl text-accent"></i>
+            <span class="text-2xl font-bold text-gradient">Capacit<span class="text-secondary">AI</span></span>
+          </div>
+          <p class="text-light mb-4">Educação profissional gratuita e personalizada através de inteligência artificial.</p>
+          <div class="flex space-x-4">
+            <a href="#" class="text-light hover:text-accent text-xl"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="text-light hover:text-accent text-xl"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="text-light hover:text-accent text-xl"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="text-light hover:text-accent text-xl"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+        
+        <div>
+          <h3 class="text-lg font-bold mb-4 text-accent">Links Rápidos</h3>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-light hover:text-white">Início</a></li>
+            <li><a href="#" class="text-light hover:text-white">Sobre Nós</a></li>
+            <li><a href="#" class="text-light hover:text-white">Cursos</a></li>
+            <li><a href="#" class="text-light hover:text-white">Como Funciona</a></li>
+            <li><a href="#" class="text-light hover:text-white">Contato</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h3 class="text-lg font-bold mb-4 text-accent">Cursos</h3>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-light hover:text-white">Tecnologia</a></li>
+            <li><a href="#" class="text-light hover:text-white">Negócios</a></li>
+            <li><a href="#" class="text-light hover:text-white">Marketing</a></li>
+            <li><a href="#" class="text-light hover:text-white">Design</a></li>
+            <li><a href="#" class="text-light hover:text-white">Saúde</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h3 class="text-lg font-bold mb-4 text-accent">Contato</h3>
+          <ul class="space-y-2">
+            <li class="flex items-start">
+              <i class="fas fa-map-marker-alt text-accent mt-1 mr-2"></i>
+              <span class="text-light">Av. X, 1000 - Presidente Prudente, SP</span>
+            </li>
+            <li class="flex items-center">
+              <i class="fas fa-phone-alt text-accent mr-2"></i>
+              <span class="text-light">(11) 1234-5678</span>
+            </li>
+            <li class="flex items-center">
+              <i class="fas fa-envelope text-accent mr-2"></i>
+              <span class="text-light">contato@capacitai.org</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="border-t border-gray-800 mt-12 pt-8 text-center text-light">
+        <p>&copy; 2023 CapacitAI. Todos os direitos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating Button -->
+  <div class="fixed bottom-6 right-6 z-50">
+    <a href="login.html" class="flex items-center justify-center w-16 h-16 rounded-full btn-gradient shadow-xl hover:shadow-2xl transition-all animate-bounce">
+      <i class="fas fa-user-graduate text-2xl text-white"></i>
+    </a>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+</body>
+</html>
