@@ -10,6 +10,7 @@ const conexao = require('../db');
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
+
 router.post('/upload', upload.fields([
   { name: 'curriculo', maxCount: 1 },
   { name: 'foto', maxCount: 1 }
@@ -68,20 +69,27 @@ router.post('/upload', upload.fields([
   }
 
   // Atualizar o banco
+  const teste_vocacional = req.body.teste_vocacional === 'S' ? 'S' : 'N';
+
 const sql = `
-  INSERT INTO perfil_candidato (id_entidade, curriculo, foto, chaves, log_create, log_update)
-  VALUES (?, ?, ?, ?, NOW(), NOW())
-  ON DUPLICATE KEY UPDATE
-    curriculo = VALUES(curriculo),
-    foto = VALUES(foto),
-    chaves = VALUES(chaves),
-    log_update = NOW()
+  INSERT INTO perfil_candidato (
+  id_entidade, curriculo, foto, teste_vocacional, chaves, log_create, log_update
+)
+VALUES (?, ?, ?, ?, ?, NOW(), NOW())
+ON DUPLICATE KEY UPDATE
+  curriculo = VALUES(curriculo),
+  foto = VALUES(foto),
+  teste_vocacional = VALUES(teste_vocacional),
+  chaves = VALUES(chaves),
+  log_update = NOW()
+
 `;
 
+const jsonChaves = palavrasChaves ? JSON.stringify(palavrasChaves) : null;
 
 conexao.query(
   sql,
-  [id_entidade, arquivosSalvos.curriculo || null, arquivosSalvos.foto || null, palavrasChaves ? JSON.stringify(palavrasChaves) : null],
+  [ id_entidade, arquivosSalvos.curriculo || null, arquivosSalvos.foto || null, teste_vocacional, jsonChaves ],
   (err) => {
     if (err) {
       console.error('Erro ao atualizar banco:', err);

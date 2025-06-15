@@ -37,8 +37,27 @@
         <div id="curriculoLink" class="mt-2"></div>
       </div>
 
-      <div id="chavesExtraidas" class="mt-2 text-muted small"></div>
+        <div class="mb-3">
 
+       <div class="mb-3">
+        <label class="form-label fw-semibold text-dark">Analise preliminar</label>
+        <div id="chavesExtraidas"
+            class="d-flex flex-wrap gap-2 border rounded bg-light-subtle shadow-sm p-3"
+            style="min-height: 120px; max-height: 300px; overflow-y: auto;">
+        </div>
+        </div>
+
+
+
+        </div>
+
+
+        <div class="form-check mb-3">
+        <input class="form-check-input" type="checkbox" id="testeVocacional">
+        <label class="form-check-label" for="testeVocacional">
+            Desejo realizar teste vocacional
+        </label>
+        </div>
 
       <div class="d-grid">
         <button type="submit" class="btn btn-success">Salvar/Atualizar Currículo</button>
@@ -67,6 +86,8 @@
 
         document.getElementById('nome').value = data.nome || '';
         document.getElementById('email').value = data.email || '';
+        document.getElementById('testeVocacional').checked = data.teste_vocacional === 'S';
+
 
         const previewFoto = document.getElementById('previewFoto');
         const caminhoFoto = `/img/entidade/fotos/${id}/foto.jpg`;
@@ -92,7 +113,11 @@
         if (data.chaves && Array.isArray(data.chaves) && data.chaves.length > 0) {
             chavesDiv.innerHTML = `<strong>Palavras-chave detectadas:</strong> ${data.chaves.join(', ')}`;
         } else {
-            chavesDiv.innerHTML = `<strong>Palavras-chave detectadas:</strong> Nenhuma encontrada.`;
+           document.getElementById('chavesExtraidas').innerHTML = `
+            <strong>Palavras-chave detectadas:</strong><br>
+            <span class="text-success">${data.chaves.join(', ')}</span>
+            `;
+
         }
 
         } else {
@@ -118,6 +143,10 @@
 
       const formData = new FormData();
       formData.append('id_entidade', id);
+
+      const testeVocacional = document.getElementById('testeVocacional').checked;
+      formData.append('teste_vocacional', testeVocacional ? 'S' : 'N');
+
 
       const foto = document.getElementById('foto').files[0];
       const curriculo = document.getElementById('curriculo').files[0];

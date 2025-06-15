@@ -29,6 +29,7 @@ router.post('/cadastrar', (req, res) => {
 
 router.post('/definir-tipo-e-usuario', (req, res) => {
   const { id_entidade, id_tipo, login, senha } = req.body;
+  
 
   console.log("Recebido:", req.body); // <--- isso ainda é útil para garantir
 
@@ -89,7 +90,7 @@ router.get('/:id', (req, res) => {
     SELECT 
       e.nome, e.email,
       p.curriculo,
-      p.foto, p.chaves
+      p.foto, p.chaves, p.teste_vocacional
     FROM entidades e
     LEFT JOIN perfil_candidato p ON p.id_entidade = e.id_entidade
     WHERE e.id_entidade = ?
@@ -115,7 +116,8 @@ router.get('/:id', (req, res) => {
       curriculo: row.curriculo
         ? `/img/entidade/curriculos/${row.id_entidade}/curriculo.pdf`
         : '',
-      chaves: row.chaves ? JSON.parse(row.chaves) : []
+      chaves: row.chaves ? JSON.parse(row.chaves) : [],
+      teste_vocacional: row.teste_vocacional || 'N'
     });
   });
 });
