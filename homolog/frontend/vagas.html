@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Vagas Disponíveis</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+  <div class="container py-5">
+    <h2 class="text-center mb-4">Vagas Disponíveis</h2>
+
+    <div id="listaVagas" class="row g-4 justify-content-center">
+      <!-- Cards serão inseridos aqui via JavaScript -->
+    </div>
+
+    <div class="d-grid mt-5">
+      <a href="plataforma.html" class="btn btn-secondary">Voltar para a Plataforma</a>
+    </div>
+  </div>
+
+  <script>
+    const idEntidade = localStorage.getItem('id_entidade');
+    let chavesPerfil = [];
+
+    async function carregarChavesPerfil() {
+      if (!idEntidade) return;
+      try {
+        const res = await fetch(`/api/entidades/${idEntidade}`);
+        const data = await res.json();
+        if (data.chaves && Array.isArray(data.chaves)) {
+          chavesPerfil = data.chaves.map(c => c.toLowerCase());
+        }
+      } catch (err) {
+        console.error('Erro ao buscar perfil:', err);
+      }
+    }
+
+    async function carregarVagas() {
+      try {
+        const resposta = await fetch('/api/vagas');
+        const vagas = await resposta.json();
+
+        const container = document.getElementById('listaVagas');
+        container.innerHTML = '';
+
+        vagas.forEach(vaga => {
+          const competencias = JSON.parse(vaga.competencias);
+          const competenciasLower = competencias.map(c => c.toLowerCase());
+
+          const match = competenciasLower.filter(c => chavesPerfil.includes(c));
+          const faltam = competenciasLower.filter(c => !chavesPerfil.includes(c));
+
+          const lista = [...match.map(c => `<span class='badge bg-success me-1'>${c}</span>`),
+                         ...faltam.map(c => `<span class='badge bg-danger me-1'>${c}</span>`)].join(' ');
+
+          const card = document.createElement('div');
+          card.className = 'col-md-6 col-lg-4';
+
+          card.innerHTML = `
+            <div class="card h-100 shadow-sm">
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title">${vaga.descricao}</h5>
+                <p class="card-text text-muted">Competências exigidas:</p>
+                <div class="mb-3">${lista}</div>
+                <button class="btn btn-outline-primary mt-auto" onclick="analisarCompatibilidade(${vaga.id_vaga})">Analisar Compatibilidade</button>
+              </div>
+            </div>
+          `;
+
+          container.appendChild(card);
+        });
+
+      } catch (err) {
+        console.error('Erro ao carregar vagas:', err);
+        alert('Erro ao carregar vagas.');
+      }
+    }
+
+    function analisarCompatibilidade(idVaga) {
+      alert(`Análise feita para a vaga ${idVaga}. Veja os destaques.`);
+    }
+
+    carregarChavesPerfil().then(carregarVagas);
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
